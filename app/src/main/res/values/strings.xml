@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MoneyFy</string>
+    <string name="tab_credit">Crédito</string>
+    <string name="tab_debit">Débito</string>
+</resources>
