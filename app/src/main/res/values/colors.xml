@@ -13,6 +13,7 @@
     <color name="text_primary_dark">#E0E0E0</color>
     <color name="surface_dark">#1E1E1E</color>
     <color name="border_dark">#2C2C2C</color>
+    <color name="transparent">#00000000</color>
 
 
 </resources>
