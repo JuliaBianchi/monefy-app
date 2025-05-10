@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val fab = findViewById<FloatingActionButton>(R.id.transaction_button)
-        
+
         fab.setOnClickListener {
             val intent = Intent(this, CrudTransactionActivity::class.java)
             startActivity(intent)
