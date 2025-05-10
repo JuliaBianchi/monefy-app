@@ -1,70 +1,63 @@
 package com.example.app_moneyfy
 
+import entity.Transaction
+import android.R
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.app_moneyfy.databinding.ActivityCrudTransactionBinding
+import database.DatabaseHandler
 import java.util.Calendar
 import kotlin.text.*
 
 class CrudTransactionActivity : AppCompatActivity() {
 
-    private lateinit var spinnerType: Spinner
-    private lateinit var spinnerDetails: Spinner
 
-    private lateinit var etValue: EditText
-    private lateinit var editTextDate: EditText
-
-
+    private lateinit var binding : ActivityCrudTransactionBinding
+    private lateinit var db: DatabaseHandler
 
     @SuppressLint("MissingInflatedId", "DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_crud_transaction)
+        binding = ActivityCrudTransactionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        db = DatabaseHandler(this)
 
-        val backButton = findViewById<Button>(R.id.back_button)
-        val cancelButton = findViewById<Button>(R.id.cancelButton)
-
-        spinnerType = findViewById(R.id.spinnerType)
-        spinnerDetails = findViewById(R.id.spinnerDetails)
-
-        editTextDate = findViewById(R.id.editTextDate)
 
         val  types = listOf<String>("Selecione","Débito", "Crédito")
-        val adapterTypes = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, types)
+        val adapterTypes = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, types)
 
         val  details = mutableListOf<String>("Selecione")
-        val adapterDetails = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, details)
+        val adapterDetails = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, details)
 
-        spinnerType.adapter = adapterTypes
-        spinnerDetails.adapter = adapterDetails
+        binding.spinnerType.adapter = adapterTypes
+        binding.spinnerDetails.adapter = adapterDetails
 
-
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
         }
 
-        cancelButton.setOnClickListener {
+        binding.cancelButton.setOnClickListener {
             finish()
         }
 
-        spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
-                view: android.view.View?,
+                view: View?,
                 position: Int,
                 id: Long
             ) {
 
 
-                if (spinnerType.selectedItem.toString() == "Débito") {
+                if (binding.spinnerType.selectedItem.toString() == "Débito") {
                     details.clear()
                     details.add("Selecione:")
                     details.add("Alimentação")
@@ -81,14 +74,14 @@ class CrudTransactionActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+
             }
         }
 
-        spinnerDetails.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        binding.spinnerDetails.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>,
-                view: android.view.View?,
+                view: View?,
                 position: Int,
                 id: Long
             ) {
@@ -96,18 +89,20 @@ class CrudTransactionActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
+
             }
+
+
         }
 
-        editTextDate.setOnClickListener {
+        binding.editTextDate.setOnClickListener {
             val calendar = Calendar.getInstance()
 
             val datePicker = DatePickerDialog(
                 this,
                 { _, year, month, dayOfMonth ->
                     val selectedDate = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year)
-                    editTextDate.setText(selectedDate)
+                    binding.editTextDate.setText(selectedDate)
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -117,7 +112,26 @@ class CrudTransactionActivity : AppCompatActivity() {
             datePicker.show()
         }
 
+        binding.buttonSave.setOnClickListener {
+            buttonSaveOnClick()
+        }
 
+
+    }
+
+    private fun buttonSaveOnClick() {
+        val transaction = Transaction(
+            0,
+            binding.spinnerType.selectedItem.toString(),
+            binding.spinnerDetails.selectedItem.toString(),
+            binding.etValue.text.toString().toDouble(),
+            binding.editTextDate.text.toString(),
+
+        )
+
+        db.insert(transaction)
+
+        Toast.makeText(this, "Registro inserido com sucesso", Toast.LENGTH_LONG).show()
     }
 }
 
