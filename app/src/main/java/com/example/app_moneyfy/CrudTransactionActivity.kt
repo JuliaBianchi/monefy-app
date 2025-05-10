@@ -5,6 +5,7 @@ import android.R
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -130,6 +131,8 @@ class CrudTransactionActivity : AppCompatActivity() {
         )
 
         db.insert(transaction)
+
+        finish()
 
         Toast.makeText(this, "Registro inserido com sucesso", Toast.LENGTH_LONG).show()
     }
