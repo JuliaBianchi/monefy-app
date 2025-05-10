@@ -4,5 +4,11 @@
     <string name="tab_debit">Débito</string>
     <string name="title">Adicionar Nova transação</string>
     <string name="submit">submit</string>
+    <string name="type_text">Tipo:</string>
+    <string name="tvDetails">Detalhes:</string>
+    <string name="value_text">Valor:</string>
+    <string name="date_text">Data de Lançamento:</string>
+    <string name="save">Salvar</string>
+    <string name="cancel">Cancelar\n</string>
 
 </resources>
