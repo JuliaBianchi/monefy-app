@@ -11,7 +11,7 @@ class DatabaseHandler (context : Context ) : SQLiteOpenHelper ( context, DATABAS
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(
-            "CREATE TABLE IF NOT EXISTS $TABLE_NAME (_id INTEGER PRIMARY KEY AUTOINCREMENT,type TEXT, details TEXT, value REAL, date TEXT )"
+            "CREATE TABLE IF NOT EXISTS $TABLE_NAME (id INTEGER PRIMARY KEY AUTOINCREMENT,type TEXT, details TEXT, value REAL, date TEXT )"
         )
     }
 
@@ -26,19 +26,18 @@ class DatabaseHandler (context : Context ) : SQLiteOpenHelper ( context, DATABAS
 
         val values = ContentValues()
 
-        values.put("id", transaction.id)
         values.put("type", transaction.type)
         values.put("details", transaction.details)
         values.put("value", transaction.value)
         values.put("date", transaction.date)
 
-        db.insert("transaction", null, values)
+        db.insert("transactions", null, values)
     }
 
     companion object {
         private const val DATABASE_NAME = "dbfile.sqlite"
         private const val DATABASE_VERSION = 1
-        private const val TABLE_NAME = "transaction"
+        private const val TABLE_NAME = "transactions"
 
     }
 }
