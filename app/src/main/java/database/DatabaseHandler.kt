@@ -5,8 +5,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
-class DatabaseHandler (context : Context ) : SQLiteOpenHelper ( context, DATABASE_NAME, null, DATABASE_VERSION ) {
+class DatabaseHandler(context: Context) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -32,12 +34,41 @@ class DatabaseHandler (context : Context ) : SQLiteOpenHelper ( context, DATABAS
         values.put("date", transaction.date)
 
         db.insert("transactions", null, values)
+
+        val transactions = list()
+        Log.d("DatabaseHandler", "Lista de transações após inserção: $transactions")
+    }
+
+    fun list(): MutableList<Transaction> {
+        val db = this.writableDatabase
+        val transaction = db.query("transactions", null, null, null, null, null, null)
+        val transactions = mutableListOf<Transaction>()
+
+        while (transaction.moveToNext()){
+            val transaction = Transaction(
+                transaction.getInt(ID),
+                transaction.getString(TYPE),
+                transaction.getString(DETAILS),
+                transaction.getDouble(VALUE),
+                transaction.getString(DATE)
+            )
+            transactions.add(transaction)
+
+        }
+
+        return transactions
     }
 
     companion object {
         private const val DATABASE_NAME = "dbfile.sqlite"
         private const val DATABASE_VERSION = 1
         private const val TABLE_NAME = "transactions"
+
+        private const val ID = 0
+        private const val TYPE = 1
+        private const val DETAILS = 2
+        private const val VALUE = 3
+        private const val DATE = 4
 
     }
 }
