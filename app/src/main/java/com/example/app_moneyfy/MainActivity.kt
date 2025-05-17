@@ -8,14 +8,16 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.app_moneyfy.databinding.ActivityMainBinding
 import database.DatabaseHandler
 import entity.Transaction
 
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding : ActivityMainBinding
     private lateinit var db: DatabaseHandler
+
     private lateinit var transactionsAdapter: TransactionsAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyListTextView: TextView
@@ -25,19 +27,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         db = DatabaseHandler(this)
 
-        recyclerView = findViewById(R.id.recycler_view_transactions)
-        emptyListTextView = findViewById(R.id.text_view_empty_list)
+        recyclerView =  binding.recyclerViewTransactions
+        emptyListTextView = binding.textViewEmptyList
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         transactionsAdapter = TransactionsAdapter(mutableListOf())
         recyclerView.adapter = transactionsAdapter
-        balanceValueTextView = findViewById(R.id.balance_value)
+        balanceValueTextView = binding.balanceValue
 
-        val fab = findViewById<FloatingActionButton>(R.id.transaction_button)
+        val fab = binding.transactionButton
 
         fab.setOnClickListener {
             val intent = Intent(this, CrudTransactionActivity::class.java)
