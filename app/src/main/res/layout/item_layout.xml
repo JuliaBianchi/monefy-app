@@ -1,0 +1,65 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/text_view_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="ID: 123" />
+
+    <TextView
+        android:id="@+id/text_view_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/text_view_id"
+        app:layout_constraintTop_toTopOf="@+id/text_view_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Compra Supermercado" />
+
+
+    <TextView
+        android:id="@+id/text_view_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Itens de alimentação e limpeza para o mês." />
+
+    <TextView
+        android:id="@+id/text_view_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_details"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_date"
+        android:layout_marginEnd="8dp"
+        tools:text="R$ 250,75" />
+
+    <TextView
+        android:id="@+id/text_view_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_value"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_value"
+        tools:text="23/05/2024" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
