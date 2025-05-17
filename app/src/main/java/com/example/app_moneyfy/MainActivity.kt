@@ -1,4 +1,5 @@
 package com.example.app_moneyfy
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.icu.text.NumberFormat
 import android.os.Bundle
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         loadTransactionsAndCalculateBalance()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun loadTransactionsAndCalculateBalance() {
         val transactionsList: List<Transaction> = db.list()
 
