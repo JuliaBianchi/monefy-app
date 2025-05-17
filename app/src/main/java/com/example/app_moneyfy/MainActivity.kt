@@ -1,7 +1,8 @@
 package com.example.app_moneyfy
-
 import android.content.Intent
+import android.icu.text.NumberFormat
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import database.DatabaseHandler
+import entity.Transaction
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var transactionsAdapter: TransactionsAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyListTextView: TextView
+    private lateinit var balanceValueTextView: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         transactionsAdapter = TransactionsAdapter(mutableListOf())
         recyclerView.adapter = transactionsAdapter
+        balanceValueTextView = findViewById(R.id.balance_value)
 
         val fab = findViewById<FloatingActionButton>(R.id.transaction_button)
 
@@ -43,20 +47,42 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadTransactions()
+        loadTransactionsAndCalculateBalance()
     }
 
-    private fun loadTransactions() {
-        val transactions = db.list()
+    private fun loadTransactionsAndCalculateBalance() {
+        val transactionsList: List<Transaction> = db.list()
 
-        if (transactions.isEmpty()) {
+        var currentBalance = 0.0
+
+        for (transaction in transactionsList) {
+            if (transaction.type.equals(TYPE_RECEITA, ignoreCase = true)) {
+                currentBalance += transaction.value
+            } else if (transaction.type.equals(TYPE_DESPESA, ignoreCase = true)) {
+                currentBalance -= transaction.value
+            }
+        }
+
+        val currencyFormatter = NumberFormat.getCurrencyInstance()
+        balanceValueTextView.text = currencyFormatter.format(currentBalance)
+
+        if (transactionsList.isEmpty()) {
             recyclerView.visibility = View.GONE
             emptyListTextView.visibility = View.VISIBLE
-            emptyListTextView.text = "Nenhum lançamento encontrado."
+            emptyListTextView.text = "Nenhuma transação encontrada."
         } else {
             recyclerView.visibility = View.VISIBLE
             emptyListTextView.visibility = View.GONE
-            transactionsAdapter.updateData(transactions)
+            transactionsAdapter.updateData(transactionsList)
         }
+
+        Log.d("MainActivity", "Saldo Calculado: $currentBalance")
+        Log.d("MainActivity", "Número de Transações: ${transactionsList.size}")
+    }
+
+    companion object {
+        const val TYPE_RECEITA = "Crédito"
+        const val TYPE_DESPESA = "Débito"
     }
 }
+
